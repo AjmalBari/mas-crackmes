@@ -20,14 +20,16 @@ void *monitor_pid(void *) {
 
     waitpid(child_pid, &status, 0);
 
-    if (status != 11) {
-
-        // If this is a release build, the child will segfault (status 11). Otherwise, waitpid() should never return.
-
-        _exit(0); // Commit seppuku
+    // Older release builds segfault the child (signal 11, or 139 with a core
+    // dump). Current Android denies ptrace, and the runtime swallows SIGSEGV,
+    // so the child exits 0 instead. Both mean the check ran without a tracer.
+    if ((WIFSIGNALED(status) && WTERMSIG(status) == SIGSEGV)
+            || (WIFEXITED(status) && WEXITSTATUS(status) == 0)) {
+        pthread_exit(NULL);
     }
 
-    pthread_exit(NULL);
+    // Child died some other way: a debugger is attached, or the check was patched.
+    _exit(0);
 
 }
 
@@ -58,6 +60,10 @@ void anti_debug() {
                 }
             }
         }
+
+        // ptrace() failed. Returning to Java after fork() aborts on current
+        // Android ("libbinder ProcessState can not be used after fork").
+        _exit(0);
 
     } else {
         pthread_t t;
