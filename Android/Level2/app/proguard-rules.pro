@@ -7,6 +7,9 @@
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
+# Match the old proguard-android.txt default: obfuscate, but do not optimize.
+-dontoptimize
+
 # Add any project specific keep options here:
 
 # If your project uses WebView with JS, uncomment the following

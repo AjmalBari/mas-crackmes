@@ -1,40 +1,51 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    namespace 'sg.vantagepoint.uncrackable2'
+    compileSdk 36
+    ndkVersion '27.0.12077973'
+
     defaultConfig {
         applicationId "owasp.mstg.uncrackable2"
-        minSdkVersion 19
-        targetSdkVersion 28
+        minSdk 21
+        targetSdk 36
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
         externalNativeBuild {
             cmake {
                 cppFlags "-fvisibility=hidden"
             }
         }
     }
+
     buildTypes {
         release {
+            debuggable false
+            signingConfig signingConfigs.debug
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     externalNativeBuild {
         cmake {
-            path "CMakeLists.txt"
+            path 'CMakeLists.txt'
+            version '3.22.1'
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.0', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    testImplementation 'junit:junit:4.12'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test:core:1.6.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
 }
