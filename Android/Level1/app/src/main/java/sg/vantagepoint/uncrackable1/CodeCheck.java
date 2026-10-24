@@ -17,7 +17,7 @@ public class CodeCheck {
     public static boolean check_code(String code) {
         boolean v5 = false;
         String v3 = "8d127684cbc37c17616d806cf50473cc";
-        byte[] v2 = Base64.decode("5UJiFctbmgbDoLXmpL12mkno8HT4Lv8dlat8FxR2GOc=", 0);
+        byte[] v2 = Base64.decode("EivfHM/WxBHdklHblkp4hVb9oPvTZToOCrzp1onYKhc=", 0);
 
         byte v0[] = {};
 
